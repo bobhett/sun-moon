@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="sunrise.svg" />
+  <meta charset="UTF-8">
+  <title>Location chooser</title>
+  <link rel="stylesheet" type="text/css" href="calendar.css">
+  <style>
+    body {
+      text-align: center;
+    }
+
+    body,
+    input,
+    select,
+    button {
+      font-size: calc(min(3vw, 20px));
+    }
+    div {
+      margin: 12px;
+      line-height: 2;
+    }
+
+    @media only screen and (max-width: 500px) {
+
+      body,
+      input,
+      select,
+      button {
+        font-size: 15px;
+      }
+    }
+  </style>
+  <script src="tz.js"></script>
+  <script>
+    window.addEventListener("load", start);
+
+    var longitude;
+    var latitude;
+    var placeName;
+
+    function start() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(getPlaceName);
+      }
+      else {
+        console.log("Geolocation is not supported by this browser - using default");
+        const pos = {
+          coords: {
+            latitude: 39.9960522,
+            longitude: -105.0908262
+          }
+        }
+        getPlaceName(pos)
+      }
+    }
+
+    async function getPlaceName(pos) {
+      let place = document.getElementById("name");
+      let url = `https://geocode.maps.co/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&api_key=6591c355a457b800916849qixd2539f`;
+
+      await fetch(url)
+        .then(response => response.json())
+        .then(result => place.value = `${result.address.town},${result.address.state},${result.address.country_code}`)
+        .catch(error => alert("Error getting current location"));
+        
+      place.disabled=false;
+    }
+
+    async function search() {
+      let place = document.getElementById("name");
+      let choice = document.getElementById("choice");
+
+      let url = `https://geocode.maps.co/search?q=${place.value}&api_key=6591c355a457b800916849qixd2539f`
+
+      await fetch(url)
+        .then(response => response.json())
+        .then(result => buildSelect(result))
+        .catch(error => alert("Error looking up places.  Try again."));
+    }
+
+    async function buildSelect(result) {
+      let choice = document.getElementById("choice");
+      choice.innerHTML = "";
+
+      for (item of result) {
+        const tz = tzlookup(item.lat, item.lon);
+        var option = document.createElement("option");
+        option.value = `lat=${item.lat}&lon=${item.lon}&name=${item.display_name}&tz=${tz}`;
+        option.text = item.display_name.length > 60?item.display_name.slice(0, 60) + "...":item.display_name;
+        choice.appendChild(option);
+      }
+      var option = document.createElement("option");
+      option.value = '';
+      option.text = " -- Use current location -- ";
+      choice.appendChild(option);    
+    }
+
+    function go() {
+      let choice = document.getElementById("choice");
+      let sunriseAngle = document.getElementById("sunriseAngle");
+      let sunsetAngle = document.getElementById("sunsetAngle");
+      
+      location.href = `calendar.html?${choice.value}&sunriseAngle=${sunriseAngle.value}&sunsetAngle=${sunsetAngle.value}`;
+    }
+  </script>
+</head>
+
+<body>
+  <h2>Search for place name:</h2>
+  <div><input name="name" id="name" onkeydown="if(event.keyCode==13) search()" onClick="this.select();" value="Getting current location" disabled=true></div>
+  
+  <div><button onclick="search()">SEARCH</button></div>
+  <div><select id="choice">
+    <option disabled selected="selected">-- Use current location --</option>
+  </select></div>
+  <div>
+  Angle adjust for sunrise: <input id="sunriseAngle"><br>
+  Angle adjust for sunset: <input id="sunsetAngle">
+  </div>
+  <div><button onclick="go()">View Selected Calendar</button></div>
+</body>
+
+</html>

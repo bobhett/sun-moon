@@ -1,0 +1,177 @@
+body {
+  padding-top: 4px;
+  font-family: sans-serif;
+  position: relative;
+  background-color: black;
+  color: white;
+}
+
+#place {
+  min-height: 1.5em;
+  font-size: 175%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: auto 28px;
+}
+
+#placeName {
+  max-width: 10em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: bottom;  
+}
+
+#gear{
+  cursor: pointer;
+  position: fixed;
+  top: 3px;
+  right: 3px;
+  height: 24px;
+  background-color: black;
+}
+
+#monthName {
+  min-height: 1.5em;
+  font-size: 175%;
+  text-align: center;
+  margin: 24px auto 20px auto;
+  white-space: nowrap;
+}
+
+#prev,
+#next {
+  width: 3em;
+  height: 3em;
+  font-size: 1em;
+  z-index: 100;
+  position: absolute;
+  top: 4em;
+}
+
+#prev {
+  left: calc((100vw - min(90vw, 95vh)) / 2);
+}
+
+#next {
+  right: calc((100vw - min(90vw, 95vh)) / 2);
+}
+
+table.calendar {
+  margin: auto;
+  white-space: nowrap;
+}
+
+table.calendar th {
+  font-size: 125%;
+  height: 1em;
+  display: inline-block;
+  width: calc(min(90vw / 7 - 2px, 144px));
+  margin-bottom: 4px;
+  border: 1px solid transparent;
+}
+
+table.calendar td {
+  vertical-align: top;
+  border: 1px solid white;
+  background-color: black;
+  height: 6.1em;
+  width: calc(min(90vw / 7 - 2px, 144px));
+  display: inline-block;
+  position: relative;
+}
+
+table.calendar .offMonth {
+  background-color: DimGray;
+}
+
+table.calendar .today {
+  transform: scale(1.1);
+  box-shadow: inset 0 0 0 1px black;
+  background-color: DarkSlateBlue;
+  z-index: 100;
+}
+
+div.date {
+  font-size: 125%;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+div.sunrise, div.sunset {
+  FONT-SIZE: 90%;
+  overflow: hidden;
+  white-space: pre;
+  margin-left: .5em;
+}
+
+.earliest, .latest {
+  color: black;
+  background-color: white;
+}
+
+
+.sunset:after {
+  content: " Sunset";
+}
+
+.sunrise:after {
+  content: " Sunrise";
+}
+
+div[class="sunrise latest"]:after {
+  content: " Latest Sunrise";
+}
+
+div[class="sunrise earliest"]:after {
+  content: " Earliest Sunrise";
+}
+
+div[class="sunset latest"]:after {
+  content: " Latest Sunset";
+}
+
+div[class="sunset earliest"]:after {
+  content: " Earliest Sunset";
+}
+
+
+
+.moonBG {
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  padding: 0;
+  margin: 0;
+  bottom: 1px;
+  right: 1px;
+  font-size: 0;
+  background-color: black;
+  border: 2px solid black;
+}
+
+.moon {
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 0;
+  font-size: 0;
+  border-radius: 50%;
+}
+
+.phase {
+  position: absolute;
+  height: 18px;
+  width: 50%;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 25%;
+  font-size: 0;
+  border-radius: 50%;
+}
