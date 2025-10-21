@@ -115,8 +115,11 @@ function makeRow(stamp) {
     const tomorrow = new Date(stamp.valueOf() + 8.64e+7);
 
     const curTimes = SunCalc.getTimes(stamp, gLatitude, gLongitude);
+    curTimes.dayLength = ((curTimes.sunset - curTimes.sunrise) / (1000 * 60 * 60));
     const yesTimes = SunCalc.getTimes(yesterday, gLatitude, gLongitude);
+    yesTimes.dayLength = ((yesTimes.sunset - yesTimes.sunrise) / (1000 * 60 * 60));
     const tomTimes = SunCalc.getTimes(tomorrow, gLatitude, gLongitude);
+    tomTimes.dayLength = ((tomTimes.sunset - tomTimes.sunrise) / (1000 * 60 * 60));
 
     msg = "";
     td = makeCell('td');
@@ -167,11 +170,11 @@ function makeRow(stamp) {
     else {
       sRise = makeCell('div', `${gFormatter.format(curTimes.sunrise)}`, 'sunrise');
       sSet = makeCell('div', `${gFormatter.format(curTimes.sunset)}`, 'sunset');
+      dLen = makeCell('div', curTimes.dayLength.toFixed(2), 'dayLength');
       
       if (curTimes.sunrise.valueOf() <= yesTimes.sunrise.valueOf() + 8.64e+7 && curTimes.sunrise.valueOf() <= tomTimes.sunrise.valueOf() - 8.64e+7) {
-          sRise.classList.add('earliest');
+        sRise.classList.add('earliest');
       }
-
       if (curTimes.sunrise.valueOf() >= yesTimes.sunrise.valueOf() + 8.64e+7 && curTimes.sunrise.valueOf() >= tomTimes.sunrise.valueOf() - 8.64e+7) {
         sRise.classList.add('latest');
       }
@@ -181,8 +184,16 @@ function makeRow(stamp) {
       if (curTimes.sunset.valueOf() >= yesTimes.sunset.valueOf() + 8.64e+7 && curTimes.sunset.valueOf() >= tomTimes.sunset.valueOf() - 8.64e+7) {
         sSet.classList.add('latest');
       }
+      if (curTimes.dayLength > yesTimes.dayLength && curTimes.dayLength > tomTimes.dayLength) {
+        dLen.classList.add("longest");
+      }
+      if (curTimes.dayLength < yesTimes.dayLength && curTimes.dayLength < tomTimes.dayLength) {
+        dLen.classList.add("shortest");
+      }
+      
       td.appendChild(sRise);
       td.appendChild(sSet);
+      td.appendChild(dLen);
     }
     row.appendChild(td);
 

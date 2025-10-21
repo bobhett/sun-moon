@@ -100,14 +100,14 @@ div.date {
   margin-bottom: 2px;
 }
 
-div.sunrise, div.sunset {
+div.sunrise, div.sunset, div.dayLength {
   FONT-SIZE: 90%;
   overflow: hidden;
   white-space: pre;
   margin-left: .5em;
 }
 
-.earliest, .latest {
+.earliest, .latest, .shortest, .longest {
   color: black;
   background-color: white;
 }
@@ -119,6 +119,10 @@ div.sunrise, div.sunset {
 
 .sunrise:after {
   content: " Sunrise";
+}
+
+.dayLength:after {
+  content: " Hours";
 }
 
 div[class="sunrise latest"]:after {
@@ -135,6 +139,14 @@ div[class="sunset latest"]:after {
 
 div[class="sunset earliest"]:after {
   content: " Earliest Sunset";
+}
+
+div[class="dayLength shortest"]:after {
+  content: " Hours Shortest Day";
+}
+
+div[class="dayLength longest"]:after {
+  content: " Hours Longest Day";
 }
 
 
