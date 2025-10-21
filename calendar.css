@@ -23,12 +23,21 @@ body {
   vertical-align: bottom;  
 }
 
-#gear{
+#map{
   cursor: pointer;
   position: fixed;
-  top: 3px;
-  right: 3px;
-  height: 24px;
+  top: .75em;
+  right: .75em;
+  height: 36px;
+  background-color: black;
+}
+
+#current{
+  cursor: pointer;
+  position: fixed;
+  top: .75em;
+  left: .75em;
+  height: 36px;
   background-color: black;
 }
 

@@ -71,7 +71,6 @@ function init(position, placeName = `(${Math.round(position.coords.latitude*100)
 }
 
 function makeTable() {
-  console.log("Making Table");
   const msec = 1000 * 24 * 60 * 60; // msec in a day
   var stamp = new Date(first.getTime() - first.getDay() * msec); // back-up to Sunday
   last = new Date(first);
