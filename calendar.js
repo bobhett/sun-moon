@@ -9,7 +9,7 @@ var last;
 var gLatitude;
 var gLongitude;
 
-function start() {
+function start(tryParams = true) {
   document.getElementById("prev").addEventListener("click", prev);
   document.getElementById("next").addEventListener("click", next);
 
@@ -25,7 +25,7 @@ function start() {
   SunCalc.addTime(Number(params.get("sunsetAngle")), null, "sunset");
 
 
-  if (paramLon && paramLat && paramName) {
+  if (tryParams && paramLon && paramLat && paramName) {
     const pos = {
       coords: {
         latitude: paramLat,
