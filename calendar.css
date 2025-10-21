@@ -16,7 +16,7 @@ body {
 }
 
 #placeName {
-  max-width: 10em;
+  max-width: calc(100vw - 1.5em - 74px);
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;

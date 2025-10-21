@@ -36,9 +36,7 @@ function start() {
   }
   // get current location
   else if (navigator.geolocation) {
-    document.body.style.cursor = 'wait';
     navigator.geolocation.getCurrentPosition(init);
-    document.body.style.cursor = 'default';
   }
   else {
     console.log("Geolocation is not supported by this browser - using default");
