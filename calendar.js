@@ -19,7 +19,6 @@ function start(tryParams = true) {
   let paramLat = params.get("lat");
   let paramLon = params.get("lon");
   let paramName = params.get("name");
-  let paramTZ = params.get("tz");
       
   SunCalc.addTime(Number(params.get("sunriseAngle")), "sunrise", null);
   SunCalc.addTime(Number(params.get("sunsetAngle")), null, "sunset");
@@ -32,7 +31,7 @@ function start(tryParams = true) {
         longitude: paramLon
       }
     };
-    init(pos, paramName, paramTZ);
+    init(pos, paramName);
   }
   // get current location
   else if (navigator.geolocation) {
@@ -46,25 +45,21 @@ function start(tryParams = true) {
         longitude: -105.0908262
       }
     };
-    init(pos, "Lafayette, CO", "America/Denver");
+    init(pos, "Lafayette, CO");
   }
 }
 
-function init(position, placeName = `(${Math.round(position.coords.latitude*100)/100}, ${Math.round(position.coords.longitude*100)/100})`, tz = null) {
+function init(position, placeName = `(${Math.round(position.coords.latitude*100)/100}, ${Math.round(position.coords.longitude*100)/100})`) {
   gLatitude = position.coords.latitude;
   gLongitude = position.coords.longitude;
+  let tz = tzlookup(gLatitude, gLongitude);
+  if(!tz) tz = "America/Denver";
 
-  if (tz) {
-    gFormatter = new Intl.DateTimeFormat("en-US", {
-      timeZone: tz,
-      timeStyle: "short",
-    });
-  }
-  else {
-    gFormatter = new Intl.DateTimeFormat("en-US", {
-      timeStyle: "short"
-    });
-  }
+  gFormatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: tz,
+    timeStyle: "short",
+  });
+
   document.getElementById("placeName").innerHTML = placeName;
 
   makeTable();
@@ -157,7 +152,9 @@ function makeRow(stamp) {
       const l = (1.0 - curMoon.phase) * 200;
       phaseStyle = `background-color: black; width: ${w}%; left: ${l}%`;
     }
-    const moonTitle = curMoonTimes.alwaysUp?'Moon does not set':curMoonTimes.alwaysDown?'Moon does not rise':`Moon rise: ${gFormatter.format(curMoonTimes.rise)}\nMoon set: ${gFormatter.format(curMoonTimes.set)}`;
+    const moonSet = curMoonTimes.set?`Moon set: ${gFormatter.format(curMoonTimes.set)}`:'Moon does not set';
+    const moonRise = curMoonTimes.rise?`Moon rise: ${gFormatter.format(curMoonTimes.rise)}`:'Moon does not rise';
+    const moonTitle = curMoonTimes.set && curMoonTimes.rise && curMoonTimes.set - curMoonTimes.rise < 0? `${moonSet}\n${moonRise}`:`${moonRise}\n${moonSet}`;
     
     
     td.innerHTML = `<div class="moonBG" title="${moonTitle}" onclick="alert(this.title)"><div class="moon" style="${moonStyle}"></div><div class="phase" style="${phaseStyle}"></div></div><div class="date">${stamp.getDate()}</div>`;

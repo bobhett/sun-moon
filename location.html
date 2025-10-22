@@ -35,41 +35,39 @@
       }
     }
   </style>
-  <script src="tz.js"></script>
   <script>
     window.addEventListener("load", start);
 
-    var longitude;
-    var latitude;
-    var placeName;
-
     function start() {
-      if (navigator.geolocation) {
+      if (navigator.geolocation) {  // can get current location
         navigator.geolocation.getCurrentPosition(getPlaceName);
       }
-      else {
-        console.log("Geolocation is not supported by this browser - using default");
-        const pos = {
+      else { // Geolocation is not available - using default location Lafayette, CO USA
+        defaultLoc = {
           coords: {
             latitude: 39.9960522,
             longitude: -105.0908262
           }
         }
-        getPlaceName(pos)
+        getPlaceName(defaultLoc)
       }
     }
 
     async function getPlaceName(pos) {
       let place = document.getElementById("name");
+      
+      // attempt a reverse lookup of place name by lat/lon
+      
       let url = `https://geocode.maps.co/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&api_key=6591c355a457b800916849qixd2539f`;
 
       await fetch(url)
         .then(response => response.json())
-        .then(result => place.value = `${result.address.town},${result.address.state},${result.address.country_code}`)
-        .catch(error => alert("Error getting current location"));
-        
-      place.disabled=false;
-    }
+        .then((result) => {
+          place.value = `${result.address.town},${result.address.state},${result.address.country_code}`;
+          place.disabled = false;
+        })
+        .catch(error => place.value = "Error getting current location");
+      }
 
     async function search() {
       let place = document.getElementById("name");
@@ -84,18 +82,19 @@
     }
 
     async function buildSelect(result) {
+      let place = document.getElementById("name");
       let choice = document.getElementById("choice");
       choice.innerHTML = "";
 
       for (item of result) {
-        const tz = tzlookup(item.lat, item.lon);
+//        const tz = tzlookup(item.lat, item.lon);
         var option = document.createElement("option");
-        option.value = `lat=${item.lat}&lon=${item.lon}&name=${item.display_name}&tz=${tz}`;
+        option.value = `lat=${item.lat}&lon=${item.lon}&name=${item.display_name}`;
         option.text = item.display_name.length > 60?item.display_name.slice(0, 60) + "...":item.display_name;
         choice.appendChild(option);
       }
-      var option = document.createElement("option");
-      option.value = '';
+      var option = document.createElement("option"); 
+      option.value = "";
       option.text = " -- Use current location -- ";
       choice.appendChild(option);    
     }
@@ -116,7 +115,7 @@
   
   <div><button onclick="search()">SEARCH</button></div>
   <div><select id="choice">
-    <option disabled selected="selected">-- Use current location --</option>
+  <option value=""> -- Use current location -- </option>
   </select></div>
   <div>
   Angle adjust for sunrise: <input id="sunriseAngle"><br>
