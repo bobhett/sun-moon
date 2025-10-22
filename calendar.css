@@ -8,7 +8,7 @@ body {
 
 #place {
   min-height: 1.5em;
-  font-size: 175%;
+  font-size: 150%;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -43,9 +43,9 @@ body {
 
 #monthName {
   min-height: 1.5em;
-  font-size: 175%;
+  font-size: 150%;
   text-align: center;
-  margin: 24px auto 20px auto;
+  margin: .6em auto .4em auto;
   white-space: nowrap;
 }
 
@@ -70,6 +70,7 @@ body {
 table.calendar {
   margin: auto;
   white-space: nowrap;
+  border-collapse: collapse;
 }
 
 table.calendar th {
