@@ -1,8 +1,6 @@
 window.addEventListener("load", start);
 
-// establish "first" as the first of the current month:
-var first = new Date();
-first.setDate(1);
+var first;
 var now = new Date();
 
 var last;
@@ -61,7 +59,9 @@ function init(position, placeName = `(${Math.round(position.coords.latitude*100)
   });
 
   document.getElementById("placeName").innerHTML = placeName;
-
+// establish "first" as the first of the current month and display
+  first = new Date();
+  first.setDate(1);
   makeTable();
 }
 
