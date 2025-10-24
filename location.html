@@ -34,9 +34,14 @@
     }
   </style>
   <script>
+    /*     
+    since current location was added to main page, it's not needed here anymore
+    
     window.addEventListener("load", start);
 
     function start() {
+
+    
       if (navigator.geolocation) {  // can get current location
         navigator.geolocation.getCurrentPosition(getPlaceName);
       }
@@ -65,7 +70,9 @@
           place.disabled = false;
         })
         .catch(error => place.value = "Error getting current location");
-      }
+    }
+    
+    */
 
     async function search() {
       let place = document.getElementById("name");
@@ -109,7 +116,8 @@
 
 <body>
   <h2>Search for place name:</h2>
-  <div><input name="name" id="name" onkeydown="if(event.keyCode==13) search()" onClick="this.select();" value="Getting current location" disabled=true></div>
+<!--  <div><input name="name" id="name" onkeydown="if(event.keyCode==13) search()" onClick="this.select();" value="Getting current location" disabled=true></div> -->
+  <div><input name="name" id="name" onkeydown="if(event.keyCode==13) search()" onClick="this.select();" placeholder="Enter a place name"></div>
   
   <div><button onclick="search()">SEARCH</button></div>
   <div><select id="choice">

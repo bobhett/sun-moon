@@ -1,55 +1,73 @@
 window.addEventListener("load", start);
 
+// define global timestamps for first and last date of displayed calendar
 var first;
 var now = new Date();
-
 var last;
+
+// define global lat/lon of location being displayed (default to Lafayette, CO)
+
 var gLatitude;
 var gLongitude;
 
-function start(tryParams = true) {
+
+function start(useParams = true) {
+  
+  // add click behavior to next/prev buttons
+
   document.getElementById("prev").addEventListener("click", prev);
   document.getElementById("next").addEventListener("click", next);
 
-  // see if location is provided in URL
+  // clear out any currently displayed calendar
+    document.getElementById("calendar").innerHTML = '';
 
-  let params = new URLSearchParams(document.location.search);
-  let paramLat = params.get("lat");
-  let paramLon = params.get("lon");
-  let paramName = params.get("name");
-      
+  // get desired loc info from search string if appropriate
+  
+  const params = useParams?new URLSearchParams(document.location.search):new URLSearchParams();
+  gLatitude = params.get("lat");
+  gLongitude = params.get("lon");
+  gName = params.get("name");
+     
+  // set angle adjustments if specified
+    
   SunCalc.addTime(Number(params.get("sunriseAngle")), "sunrise", null);
   SunCalc.addTime(Number(params.get("sunsetAngle")), null, "sunset");
 
-
-  if (tryParams && paramLon && paramLat && paramName) {
-    const pos = {
-      coords: {
-        latitude: paramLat,
-        longitude: paramLon
-      }
-    };
-    init(pos, paramName);
-  }
-  // get current location
-  else if (navigator.geolocation) {
+  // if bad (or no) params, use current location
+  if (!gLatitude || !gLongitude || !gName) {
+    
+    // make sure browser supports geolocation
+    if (!navigator.geolocation) {
+      alert("This browser can not determine your current location.  Select a location by clicking the map icon first");
+      return;
+    }
+    
+    // get current location and call init
+    document.getElementById("placeName").innerHTML = "Getting Current Location...";
     navigator.geolocation.getCurrentPosition(init);
   }
-  else {
-    console.log("Geolocation is not supported by this browser - using default");
-    const pos = {
-      coords: {
-        latitude: 39.9960522,
-        longitude: -105.0908262
-      }
-    };
-    init(pos, "Lafayette, CO");
+  else {  // ok to use current loc
+    init({coords:{latitude: gLatitude, longitude: gLongitude}}, gName);
   }
 }
 
-function init(position, placeName = `(${Math.round(position.coords.latitude*100)/100}, ${Math.round(position.coords.longitude*100)/100})`) {
-  gLatitude = position.coords.latitude;
+// initialize once you have location info 
+function init(position, placeName) {
+  // update globals if necessary
+  gLatitude = position.coords.latitude;  
   gLongitude = position.coords.longitude;
+  
+  
+  // display place name (or default coordinates until reverse lookup completes)
+  if (!placeName) {
+    document.getElementById("placeName").innerHTML = `(${Math.round(position.coords.latitude*100)/100}, ${Math.round(position.coords.longitude*100)/100})`;
+    setPlaceName(position);  // async
+  }
+  else {
+    document.getElementById("placeName").innerHTML = placeName;
+  }
+  
+  // get appropriate timezone for lat/lon
   let tz = tzlookup(gLatitude, gLongitude);
   if(!tz) tz = "America/Denver";
 
@@ -58,11 +76,22 @@ function init(position, placeName = `(${Math.round(position.coords.latitude*100)
     timeStyle: "short",
   });
 
-  document.getElementById("placeName").innerHTML = placeName;
-// establish "first" as the first of the current month and display
+// establish "first" date as the first of the current month and make the table
   first = new Date();
   first.setDate(1);
   makeTable();
+}
+
+async function setPlaceName(pos) {  
+  // attempt a reverse lookup of place name by lat/lon
+  
+  let url = `https://geocode.maps.co/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&api_key=6591c355a457b800916849qixd2539f`;
+
+  await fetch(url)
+    .then(response => response.json())
+    .then((result) => {
+      document.getElementById("placeName").innerHTML = `${result.address.town},${result.address.state},${result.address.country_code.toUpperCase()}`;
+    })
 }
 
 function makeTable() {
@@ -75,7 +104,6 @@ function makeTable() {
   const monthName = first.toLocaleString('en-us', {
     month: 'long'
   });
-
 
   document.getElementById("monthName").innerHTML = monthName + " " + first.getFullYear();
 
