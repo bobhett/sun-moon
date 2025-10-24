@@ -79,10 +79,14 @@
     </table>
   </div>
 <script>
-if (!navigator.serviceWorker.controller) {
-   navigator.serviceWorker.register("/sw.js").then(function(reg) {
-       console.log("Service worker has been registered for scope: " + reg.scope);
-   });
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sun-moon/sw.js', { scope: '/sun-moon/' })
+    .then(registration => {
+      console.log('Service Worker registered with scope:', registration.scope);
+    })
+    .catch(error => {
+      console.error('Service Worker registration failed:', error);
+    });
 }
 </script>
 </body>
