@@ -1,0 +1,19 @@
+{
+    "name": "Sun and Moon Calendar",
+    "short_name": "SunMoon",
+    "theme_color": "white",
+    "background_color": "black",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "https://bobhett.com/sun-moon/",
+    "description": "Sun and Moon Rise/Set information calendar",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "https://bobhett.com/sun-moon/sunrise.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ]
+}
