@@ -4,18 +4,87 @@
 <head>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="icon" href="sunrise.svg">
-  <link rel="manifest" href="/manifest.json">
   <meta charset="UTF-8">
   <title>Sun and Moon Calendar</title>
+  <link rel="stylesheet" type="text/css" href="calendar.css">
+  <style>
+  </style>
+  <script src="suncalc.js"></script>
+  <script src="tz.js"></script>
+  <script src="calendar.js"></script>
 </head>
+
 <body>
+  <img id="map" src="map.svg" title="Set location to generate the calendar for" onclick="location.href='location.html'">
+  <img id="current" src="current.svg" title="Generate the calendar for current location" onclick="start(false)">
+  <div id="place">Sunrise/Sunset for<br><span id="placeName"></span></div>
+  <div id="monthName"></div>
+  <div>
+    <button id="prev">&lang;</button><button id="next">&rang;</button>
+    <table id="calendar" class="calendar">
+      <tr>
+        <th>Sun</th>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+      </tr>
+      <tr>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+      </tr>
+      <tr>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+      </tr>
+      <tr>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+      </tr>
+      <tr>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+      </tr>
+      <tr>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+        <td class="none"></td>
+      </tr>
+    </table>
+  </div>
 <script>
- if (!navigator.serviceWorker.controller) {
-     navigator.serviceWorker.register("/sw.js").then(function(reg) {
-         console.log("Service worker has been registered for scope: " + reg.scope);
-     });
- }
- window.location.replace("calendar.html");
+if (!navigator.serviceWorker.controller) {
+   navigator.serviceWorker.register("/sw.js").then(function(reg) {
+       console.log("Service worker has been registered for scope: " + reg.scope);
+   });
+}
 </script>
 </body>
+
 </html>
