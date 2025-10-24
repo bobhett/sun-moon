@@ -34,46 +34,6 @@
     }
   </style>
   <script>
-    /*     
-    since current location was added to main page, it's not needed here anymore
-    
-    window.addEventListener("load", start);
-
-    function start() {
-
-    
-      if (navigator.geolocation) {  // can get current location
-        navigator.geolocation.getCurrentPosition(getPlaceName);
-      }
-      else { // Geolocation is not available - using default location Lafayette, CO USA
-        defaultLoc = {
-          coords: {
-            latitude: 39.9960522,
-            longitude: -105.0908262
-          }
-        }
-        getPlaceName(defaultLoc)
-      }
-    }
-
-    async function getPlaceName(pos) {
-      let place = document.getElementById("name");
-      
-      // attempt a reverse lookup of place name by lat/lon
-      
-      let url = `https://geocode.maps.co/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&api_key=6591c355a457b800916849qixd2539f`;
-
-      await fetch(url)
-        .then(response => response.json())
-        .then((result) => {
-          place.value = `${result.address.town},${result.address.state},${result.address.country_code}`;
-          place.disabled = false;
-        })
-        .catch(error => place.value = "Error getting current location");
-    }
-    
-    */
-
     async function search() {
       let place = document.getElementById("name");
       let choice = document.getElementById("choice");
@@ -114,9 +74,8 @@
   </script>
 </head>
 
-<body>
+<body onload="document.getElementById('name').focus()">
   <h2>Search for place name:</h2>
-<!--  <div><input name="name" id="name" onkeydown="if(event.keyCode==13) search()" onClick="this.select();" value="Getting current location" disabled=true></div> -->
   <div><input name="name" id="name" onkeydown="if(event.keyCode==13) search()" onClick="this.select();" placeholder="Enter a place name"></div>
   
   <div><button onclick="search()">SEARCH</button></div>
