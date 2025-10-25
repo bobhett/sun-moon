@@ -2,7 +2,7 @@
     "name": "Sun and Moon Calendar",
     "short_name": "SunMoon",
     "theme_color": "white",
-    "background_color": "black",
+    "background_color": "white",
     "display": "standalone",
     "scope": "/",
     "start_url": "https://bobhett.com/sun-moon/",
