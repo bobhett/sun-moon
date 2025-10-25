@@ -26,19 +26,25 @@ body {
 #map{
   cursor: pointer;
   position: fixed;
-  top: .75em;
+  top: .5em;
   right: .75em;
-  height: 36px;
-  background-color: black;
+  height: 30px;
 }
 
 #current{
   cursor: pointer;
   position: fixed;
-  top: .75em;
+  top: .5em;
   left: .75em;
-  height: 36px;
-  background-color: black;
+  height: 30px;
+}
+
+#favorite{
+  cursor: pointer;
+  position: fixed;
+  top: .5em;
+  left: calc(.75em + 30px + 6px);
+  height: 30px;
 }
 
 #monthName {

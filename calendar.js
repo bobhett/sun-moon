@@ -11,7 +11,7 @@ var gLatitude;
 var gLongitude;
 
 
-function start(useParams = true) {
+function start(mode = "search") {
   
   // add click behavior to next/prev buttons
 
@@ -19,11 +19,18 @@ function start(useParams = true) {
   document.getElementById("next").addEventListener("click", next);
 
   // clear out any currently displayed calendar
-    document.getElementById("calendar").innerHTML = '';
+  document.getElementById("calendar").innerHTML = '';
 
-  // get desired loc info from search string if appropriate
-  
-  const params = useParams?new URLSearchParams(document.location.search):new URLSearchParams();
+  let params = null;
+  if (mode == "current") {
+    params = new URLSearchParams();
+  }
+  else if (mode == "favorite" || !document.location.search) {
+    params = new URLSearchParams(localStorage.getItem('favorite'));
+  }
+  else {
+    params = new URLSearchParams(document.location.search);
+  }
   gLatitude = params.get("lat");
   gLongitude = params.get("lon");
   gName = params.get("name");

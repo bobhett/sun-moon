@@ -23,6 +23,11 @@
       line-height: 2;
     }
 
+    div.fav {
+      margin-left: 2em;
+      line-height: 1;
+    }
+    
     @media only screen and (max-width: 500px) {
 
       body,
@@ -34,11 +39,31 @@
     }
   </style>
   <script>
+  
+    function start() {
+      document.getElementById('name').focus();
+      params = new URLSearchParams(localStorage.getItem('favorite'));
+      console.log(localStorage.getItem('favorite'));
+      document.getElementById('favPlace').innerHTML = params.get('name');
+      document.getElementById('favLat').innerHTML = params.get('lat');
+      document.getElementById('favLon').innerHTML = params.get('lon');
+      document.getElementById('favAdjRise').innerHTML = params.get('sunriseAngle');
+      document.getElementById('favAdjSet').innerHTML = params.get('sunsetAngle');
+    }
+    function save() {
+      const choice = document.getElementById("choice");
+      const sunriseAngle = document.getElementById("sunriseAngle");
+      const sunsetAngle = document.getElementById("sunsetAngle");
+      
+      localStorage.setItem('favorite', `${choice.value}&sunriseAngle=${sunriseAngle.value}&sunsetAngle=${sunsetAngle.value}`);
+      
+      start();
+    }
     async function search() {
-      let place = document.getElementById("name");
-      let choice = document.getElementById("choice");
+      const place = document.getElementById("name");
+      const choice = document.getElementById("choice");
 
-      let url = `https://geocode.maps.co/search?q=${place.value}&api_key=6591c355a457b800916849qixd2539f`
+      const url = `https://geocode.maps.co/search?q=${place.value}&api_key=6591c355a457b800916849qixd2539f`
 
       await fetch(url)
         .then(response => response.json())
@@ -47,8 +72,8 @@
     }
 
     async function buildSelect(result) {
-      let place = document.getElementById("name");
-      let choice = document.getElementById("choice");
+      const place = document.getElementById("name");
+      const choice = document.getElementById("choice");
       choice.innerHTML = "";
 
       for (item of result) {
@@ -59,22 +84,22 @@
         choice.appendChild(option);
       }
       var option = document.createElement("option"); 
-      option.value = "";
+      option.value = "mode=current";
       option.text = " -- Use current location -- ";
       choice.appendChild(option);    
     }
 
     function go() {
-      let choice = document.getElementById("choice");
-      let sunriseAngle = document.getElementById("sunriseAngle");
-      let sunsetAngle = document.getElementById("sunsetAngle");
+      const choice = document.getElementById("choice");
+      const sunriseAngle = document.getElementById("sunriseAngle");
+      const sunsetAngle = document.getElementById("sunsetAngle");
       
       location.href = `index.html?${choice.value}&sunriseAngle=${sunriseAngle.value}&sunsetAngle=${sunsetAngle.value}`;
     }
   </script>
 </head>
 
-<body onload="document.getElementById('name').focus()">
+<body onload="start()">
   <h2>Search for place name:</h2>
   <div><input name="name" id="name" onkeydown="if(event.keyCode==13) search()" onClick="this.select();" placeholder="Enter a place name"></div>
   
@@ -86,7 +111,17 @@
   Angle adjust for sunrise: <input id="sunriseAngle"><br>
   Angle adjust for sunset: <input id="sunsetAngle">
   </div>
-  <div><button onclick="go()">View Selected Calendar</button> <button onclick="window.history.back()">Cancel</button></div>
+  <div>
+    <button onclick="go()">View Selected Calendar</button>
+    <button onclick="save()">Save as Favorite</button>
+    <button onclick="window.history.back()">Cancel</button>
+  </div>
+  <div>Current Favorite:
+    <div class="fav">Name: <span id="favPlace"></span></div>
+    <div class="fav">Latitude: <span id="favLat"></span></div>
+    <div class="fav">Longitude: <span id="favLon"></span></div>
+    <div class="fav">Sunrise Angle: <span id="favAdjRise"></span></div>
+    <div class="fav">Sunset Angle: <span id="favAdjSet"></span></div>
 </body>
 
 </html>

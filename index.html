@@ -17,7 +17,8 @@
 
 <body>
   <img id="map" src="map.svg" title="Set location to generate the calendar for" onclick="location.href='location.html'">
-  <img id="current" src="current.svg" title="Generate the calendar for current location" onclick="start(false)">
+  <img id="current" src="current.svg" title="Generate the calendar for current location" onclick="start('current')">
+  <img id="favorite" src="favorite.svg" title="View calendar for favorite location" onclick="start('favorite')">
   <div id="place">Sunrise/Sunset for<br><span id="placeName"></span></div>
   <div id="monthName"></div>
   <div>
